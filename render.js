@@ -113,12 +113,12 @@ function renderDifficultyTag(diff){
   const d = Number(diff) || 0;
   let label = '';
   let cls = '';
-  if(d <= 20){ label = '入门题'; cls = 'diff-red'; }
-  else if(d <= 50){ label = '联赛易'; cls = 'diff-orange'; }
-  else if(d <= 86){ label = '联赛中'; cls = 'diff-yellow'; }
-  else if(d <= 103){ label = '联赛难'; cls = 'diff-green'; }
-  else if(d <=120){ label = 'CMO难'; cls = 'diff-blue'; }
-  else if(d <= 150){ label = '集训队难'; cls = 'diff-purple'; }
+  if(d <= 50){ label = '入门题'; cls = 'diff-red'; }
+  else if(d <= 100){ label = '联赛易'; cls = 'diff-orange'; }
+  else if(d <= 150){ label = '联赛中'; cls = 'diff-yellow'; }
+  else if(d <= 200){ label = '联赛难'; cls = 'diff-green'; }
+  else if(d <=250){ label = 'CMO难'; cls = 'diff-blue'; }
+  else if(d <= 300){ label = '集训队难'; cls = 'diff-purple'; }
   else { label = '超难'; cls = 'diff-black'; }
 
   const legacy = (d <= 24) ? 'diff-beginner' : (d <= 34) ? 'diff-popular-low' : (d <= 44) ? 'diff-popular-high' : (d <= 64) ? 'diff-advanced-low' : (d <= 79) ? 'diff-provincial' : 'diff-noi';
