@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>分享结果查看 — OI 教练模拟器</title>
+  <title>分享结果查看 — MO 教练模拟器</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     .shared-banner {
@@ -225,13 +225,13 @@
               <div style="font-size:12px;color:#666">心理:${mentalRounded}</div>
             </div>
             <div class="compact small" style="margin-top:6px">
-              能力: 思维:${thinkGrade} 编码:${codeGrade}
+              能力: 思维:${thinkGrade} 书写:${codeGrade}
               <div style="margin-top:6px">知识: <span class="knowledge-badges">
-                <span class="kb" title="数据结构: ${Math.floor(Number(s.knowledge_ds || 0))}">数据结构${k_ds}</span>
-                <span class="kb" title="图论: ${Math.floor(Number(s.knowledge_graph || 0))}">图论${k_graph}</span>
-                <span class="kb" title="字符串: ${Math.floor(Number(s.knowledge_string || 0))}">字符串${k_str}</span>
-                <span class="kb" title="数学: ${Math.floor(Number(s.knowledge_math || 0))}">数学${k_math}</span>
-                <span class="kb" title="动态规划: ${Math.floor(Number(s.knowledge_dp || 0))}">动态规划${k_dp}</span>
+                <span class="kb" title="高考课内: ${Math.floor(Number(s.knowledge_ds || 0))}">高考课内${k_ds}</span>
+                <span class="kb" title="几何: ${Math.floor(Number(s.knowledge_graph || 0))}">几何${k_graph}</span>
+                <span class="kb" title="代数: ${Math.floor(Number(s.knowledge_string || 0))}">代数${k_str}</span>
+                <span class="kb" title="组合: ${Math.floor(Number(s.knowledge_math || 0))}">组合${k_math}</span>
+                <span class="kb" title="数论: ${Math.floor(Number(s.knowledge_dp || 0))}">数论${k_dp}</span>
               </span></div>
             </div>
             ${talentsHtml ? `<div class="student-talents" style="margin-top:8px">${talentsHtml}</div>` : ''}
@@ -305,10 +305,10 @@
         const competitions = (typeof window !== 'undefined' && Array.isArray(window.competitions) && window.competitions.length > 0)
           ? window.competitions.slice().sort((a, b) => a.week - b.week)
           : [
-            { name: 'CSP-S1', week: 6 }, { name: 'CSP-S2', week: 10 }, { name: 'NOIP', week: 14 },
-            { name: '省选', week: 18 }, { name: 'NOI', week: 22 }, { name: 'CSP-S1', week: 26 },
-            { name: 'CSP-S2', week: 30 }, { name: 'NOIP', week: 34 }, { name: '省选', week: 38 },
-            { name: 'NOI', week: 42 }
+            { name: '校内预选', week: 6 }, { name: '预赛', week: 10 }, { name: '联赛', week: 14 },
+            { name: '省培', week: 18 }, { name: 'CMO', week: 22 }, { name: '校内预选', week: 26 },
+            { name: '预赛', week: 30 }, { name: '联赛', week: 34 }, { name: '省培', week: 38 },
+            { name: 'CMO', week: 42 }
           ];
 
         const lastCompWeek = competitions.length ? Math.max(...competitions.map(c => Number(c.week) || 0)) : 0;

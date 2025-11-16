@@ -100,17 +100,17 @@ function __summarizeSnapshot(before, after, title, opts){
       const dK = Number((afterS.knowledge - beforeS.knowledge).toFixed(2));
       if(dP !== 0) changes.push(`压力 ${dP>0?'+':''}${dP}`);
       if(dT !== 0) changes.push(`思维 ${dT>0?'+':''}${dT}`);
-      if(dC !== 0) changes.push(`编程 ${dC>0?'+':''}${dC}`);
+      if(dC !== 0) changes.push(`书写 ${dC>0?'+':''}${dC}`);
       const dDS = Number(((afterS.knowledge_ds || 0) - (beforeS.knowledge_ds || 0)).toFixed(2));
       const dGraph = Number(((afterS.knowledge_graph || 0) - (beforeS.knowledge_graph || 0)).toFixed(2));
       const dStr = Number(((afterS.knowledge_string || 0) - (beforeS.knowledge_string || 0)).toFixed(2));
       const dMath = Number(((afterS.knowledge_math || 0) - (beforeS.knowledge_math || 0)).toFixed(2));
       const dDP = Number(((afterS.knowledge_dp || 0) - (beforeS.knowledge_dp || 0)).toFixed(2));
-      if(dDS !== 0) changes.push(`数据结构 ${dDS>0?'+':''}${dDS}`);
-      if(dGraph !== 0) changes.push(`图论 ${dGraph>0?'+':''}${dGraph}`);
-      if(dStr !== 0) changes.push(`字符串 ${dStr>0?'+':''}${dStr}`);
-      if(dMath !== 0) changes.push(`数学 ${dMath>0?'+':''}${dMath}`);
-      if(dDP !== 0) changes.push(`DP ${dDP>0?'+':''}${dDP}`);
+      if(dDS !== 0) changes.push(`高考课内 ${dDS>0?'+':''}${dDS}`);
+      if(dGraph !== 0) changes.push(`几何 ${dGraph>0?'+':''}${dGraph}`);
+      if(dStr !== 0) changes.push(`代数 ${dStr>0?'+':''}${dStr}`);
+      if(dMath !== 0) changes.push(`组合 ${dMath>0?'+':''}${dMath}`);
+      if(dDP !== 0) changes.push(`数论 ${dDP>0?'+':''}${dDP}`);
       if(dK !== 0 && !(dDS !==0 || dGraph !==0 || dStr !==0 || dMath !==0 || dDP !==0)) changes.push(`知识 ${dK>0?'+':''}${dK}`);
       if(changes.length) stuParts.push(`${name}: ${changes.join('，')}`);
     }
@@ -442,7 +442,7 @@ function trainStudentsWithTask(task, intensity) {
 }
 
 function simulateHiddenMockScore(s, diffIdx){
-  const knowledge_types = ["数据结构","图论","字符串","数学","动态规划"];
+  const knowledge_types = ["高考课内","几何","代数","组合","数论"];
   let total = 0;
   for(let qi=0; qi<4; qi++){
     const num_tags = uniformInt(1,3);
@@ -640,7 +640,7 @@ function outingTrainingWithSelection(difficulty_choice, province_choice, selecte
   if(__before && __after) __summarizeSnapshot(__before, __after, `外出集训：${target.name} 难度${difficulty_choice}`);
 }
 
-const KP_OPTIONS = [{id:1,name:"数据结构"},{id:2,name:"图论"},{id:3,name:"字符串"},{id:4,name:"数学"},{id:5,name:"动态规划"}];
+const KP_OPTIONS = [{id:1,name:"高考课内"},{id:2,name:"几何"},{id:3,name:"代数"},{id:4,name:"组合"},{id:5,name:"数论"}];
 
 function checkRandomEvents(){
   if(window.EventManager && typeof window.EventManager.checkRandomEvents === 'function'){
@@ -1103,8 +1103,8 @@ function upgradeFacility(f){
 function showFacilityUpgradeModal(){
   const facilities = ['computer', 'library', 'ac', 'dorm', 'canteen'];
   const facilityNames = {
-    'computer': '计算机',
-    'library': '资料库',
+    'computer': '教室',
+    'library': '图书馆',
     'ac': '空调',
     'dorm': '宿舍',
     'canteen': '食堂'

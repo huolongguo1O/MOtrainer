@@ -236,7 +236,7 @@
         check: c => getRandom() < 0.02 * (c.game.facilities.library || 1),
         run: c => {
           // 使用游戏中实际的知识类型（与 Student.addKnowledge 接口对齐）
-          const topics = ['数据结构','图论','字符串','数学','DP'];
+          const topics = ['高考课内','几何','代数','组合','数论'];
           const topic = topics[c.utils.uniformInt(0, topics.length - 1)];
           
           // 资料库等级影响收益：等级越高，收益越大
@@ -254,11 +254,11 @@
             } else {
               // 向后兼容：直接操作字段（仅在 addKnowledge 方法不存在时）
               console.warn(`[优质网课] 学生 ${s.name} 缺少 addKnowledge 方法，使用兼容模式`);
-              if(topic === '数据结构') s.knowledge_ds = (s.knowledge_ds || 0) + totalGain;
-              else if(topic === '图论') s.knowledge_graph = (s.knowledge_graph || 0) + totalGain;
-              else if(topic === '字符串') s.knowledge_string = (s.knowledge_string || 0) + totalGain;
-              else if(topic === '数学') s.knowledge_math = (s.knowledge_math || 0) + totalGain;
-              else if(topic === 'DP') s.knowledge_dp = (s.knowledge_dp || 0) + totalGain;
+              if(topic === '高考课内') s.knowledge_ds = (s.knowledge_ds || 0) + totalGain;
+              else if(topic === '几何') s.knowledge_graph = (s.knowledge_graph || 0) + totalGain;
+              else if(topic === '代数') s.knowledge_string = (s.knowledge_string || 0) + totalGain;
+              else if(topic === '组合') s.knowledge_math = (s.knowledge_math || 0) + totalGain;
+              else if(topic === '数论') s.knowledge_dp = (s.knowledge_dp || 0) + totalGain;
             }
           }
           
@@ -272,7 +272,7 @@
       this.register({
         id: 'forgot_checker',
         name: '构造题忘放checker',
-        description: '练习结束后资料库等级低时可能忘记放置checker',
+        description: '练习结束后图书馆等级低时可能忘记放置checker',
         check: c => {
           // 仅在资料库等级较低且刚结束练习时才有可能触发
           const libraryLevel = (c.game.facilities && c.game.facilities.library) || 1;
@@ -354,8 +354,8 @@
       // 负面事件：机房设备故障
       this.register({
         id: 'equipment_failure',
-        name: '机房设备故障',
-        description: '机房设备故障，产生维修费用或设置维修周数',
+        name: '教室设备故障',
+        description: '教室设备故障，产生维修费用或设置维修周数',
         check: c => {
           // base probability scales with computer level
           let base = 0.02 * (2 - (c.game.computer_level || 1));
@@ -373,13 +373,13 @@
             c.game.computer_repair_weeks = 0;
             const msg = `设备故障，花费 ¥${cost} 维修`;
             c.log && c.log(`[设备故障] ${msg}`);
-            window.pushEvent && window.pushEvent({ name: '机房设备故障', description: msg, week: c.game.week });
+            window.pushEvent && window.pushEvent({ name: '教室设备故障', description: msg, week: c.game.week });
             return null;
           } else {
             c.game.computer_repair_weeks = c.utils.uniformInt(1, 2);
             const msg = `设备故障，维修经费不足，影响训练 ${c.game.computer_repair_weeks} 周`;
             c.log && c.log(`[设备故障] ${msg}`);
-            window.pushEvent && window.pushEvent({ name: '机房设备故障', description: msg, week: c.game.week });
+            window.pushEvent && window.pushEvent({ name: '教室设备故障', description: msg, week: c.game.week });
             return null;
           }
         }
@@ -580,7 +580,7 @@
                     const halfIndex = (c.game.week > halfBoundary) ? 1 : 0;
                     
                     if(c.game.qualification && c.game.qualification[halfIndex]){
-                      const compOrder = window.COMPETITION_ORDER || ["CSP-S1","CSP-S2","NOIP","省选","NOI"];
+                      const compOrder = window.COMPETITION_ORDER || ["校内预选","预赛","联赛","省培","CMO"];
                       // 找到下一场即将进行的比赛
                       const futureComps = (window.competitions || []).filter(comp => comp.week > c.game.week);
                       if(futureComps.length > 0){
@@ -727,21 +727,21 @@
             
             const recentWindow = Math.max(1, (c.game.week || 0) - 2); // 近期两周内的比赛成绩触发概率
             // find relevant competition records in recent weeks
-            const relevant = c.game.careerCompetitions.filter(r => (r.name === 'NOIP' || r.name === '省选') && (typeof r.week === 'number' ? r.week >= recentWindow : true));
+            const relevant = c.game.careerCompetitions.filter(r => (r.name === '联赛' || r.name === '省培') && (typeof r.week === 'number' ? r.week >= recentWindow : true));
             if(!relevant || relevant.length === 0) return false;
 
             // get competition definitions to determine full score for NOIP
             const schedule = (window && window.COMPETITION_SCHEDULE) ? window.COMPETITION_SCHEDULE : null;
-            const noipDef = schedule && schedule.find(x=>x.name === 'NOIP');
-            const noipFull = (noipDef && typeof noipDef.maxScore === 'number') ? Number(noipDef.maxScore) : 400;
+            const noipDef = schedule && schedule.find(x=>x.name === '联赛');
+            const noipFull = (noipDef && typeof noipDef.maxScore === 'number') ? Number(noipDef.maxScore) : 300;
 
             for(const rec of relevant){
               if(!rec.entries || !Array.isArray(rec.entries)) continue;
               for(const e of rec.entries){
                 if(!e || typeof e.score !== 'number') continue;
                 // NOIP 满分 或 省选 > 500
-                if(rec.name === 'NOIP' && e.score >= noipFull) return true;
-                if(rec.name === '省选' && e.score > 500) return true;
+                if(rec.name === '联赛' && e.score >= noipFull) return true;
+                if(rec.name === '省培' && e.score > 126) return true;
               }
             }
           }catch(err){ console.error('poaching_offer check error', err); }
@@ -750,19 +750,19 @@
         run: c => {
           try{
             const schedule = (window && window.COMPETITION_SCHEDULE) ? window.COMPETITION_SCHEDULE : null;
-            const noipDef = schedule && schedule.find(x=>x.name === 'NOIP');
-            const noipFull = (noipDef && typeof noipDef.maxScore === 'number') ? Number(noipDef.maxScore) : 400;
+            const noipDef = schedule && schedule.find(x=>x.name === '联赛');
+            const noipFull = (noipDef && typeof noipDef.maxScore === 'number') ? Number(noipDef.maxScore) : 300;
 
             // find the most recent matching entry and corresponding student
             const recentWindow = Math.max(1, (c.game.week || 0) - 2);
-            const records = (c.game.careerCompetitions || []).filter(r => (r.name === 'NOIP' || r.name === '省选') && (typeof r.week === 'number' ? r.week >= recentWindow : true));
+            const records = (c.game.careerCompetitions || []).filter(r => (r.name === '联赛' || r.name === '省培') && (typeof r.week === 'number' ? r.week >= recentWindow : true));
             let targetEntry = null; let compName = null;
             outer: for(const rec of records){
               if(!rec.entries) continue;
               for(const e of rec.entries){
                 if(!e || typeof e.score !== 'number') continue;
-                if(rec.name === 'NOIP' && e.score >= noipFull){ targetEntry = e; compName = 'NOIP'; break outer; }
-                if(rec.name === '省选' && e.score > 500){ targetEntry = e; compName = '省选'; break outer; }
+                if(rec.name === '联赛' && e.score >= noipFull){ targetEntry = e; compName = '联赛'; break outer; }
+                if(rec.name === '省培' && e.score > 126){ targetEntry = e; compName = '省培'; break outer; }
               }
             }
             if(!targetEntry) return null;
@@ -914,7 +914,7 @@
             else s.coding = (s.coding || 0) + 10;
           }
           const names = triggered.map(s => s.name).join('、');
-          const msg = `${names} 写了一个网页游戏，代码能力 +10`;
+          const msg = `${names} 写了一个网页游戏，书写能力 +10`;
           c.log && c.log(`[课余项目] ${msg}`);
           window.pushEvent && window.pushEvent({ name: '课余项目', description: msg, week: c.game.week });
           return null;
@@ -979,7 +979,7 @@
       this.register({
         id: 'stinky_water',
         name: '臭水',
-        description: '学生在机房养的臭水炸了',
+        description: '学生在教室养的臭水炸了',
         check: function(c){
           const active = perStudentRolls(c.game);
           this._pendingTriggered = active.filter(() => getRandom() < 0.003);
@@ -998,7 +998,7 @@
             try{ if(typeof s.triggerTalents === 'function'){ s.triggerTalents('pressure_change', { source: 'stinky_water', amount: -10 }); } }catch(e){}
           }
           const names = triggered.map(s => s.name).join('、');
-          const msg = `${names} 在机房养的臭水炸了，压力 -10，舒适度 -5`;
+          const msg = `${names} 在教室养的臭水炸了，压力 -10，舒适度 -5`;
           c.log && c.log(`[臭水] ${msg}`);
           window.pushEvent && window.pushEvent({ name: '臭水', description: msg, week: c.game.week });
           return null;
@@ -1009,7 +1009,7 @@
       this.register({
         id: 'wmc_game',
         name: 'WMC',
-        description: '学生用希沃白板打舞梦DX',
+        description: '学生用希沃白板打phigros',
         check: function(c){
           const active = perStudentRolls(c.game);
           this._pendingTriggered = active.filter(() => getRandom() < 0.003);
@@ -1025,7 +1025,7 @@
             try{ if(typeof s.triggerTalents === 'function'){ s.triggerTalents('pressure_change', { source: 'wmc_game', amount: -5 }); } }catch(e){}
           }
           const names = triggered.map(s => s.name).join('、');
-          const msg = `${names} 用希沃白板打舞梦DX，压力 -5`;
+          const msg = `${names} 用希沃白板打phigros，压力 -5`;
           c.log && c.log(`[WMC] ${msg}`);
           window.pushEvent && window.pushEvent({ name: 'WMC', description: msg, week: c.game.week });
           return null;
@@ -1062,7 +1062,7 @@
       this.register({
         id: 'florr_game',
         name: 'florr',
-        description: '学生发现了一款名为florr.io的游戏',
+        description: '学生发现了一款名为generals.io的游戏',
         check: function(c){
           const active = perStudentRolls(c.game);
           this._pendingTriggered = active.filter(() => getRandom() < 0.003);
@@ -1078,7 +1078,7 @@
             try{ if(typeof s.triggerTalents === 'function'){ s.triggerTalents('pressure_change', { source: 'florr_game', amount: -5 }); } }catch(e){}
           }
           const names = triggered.map(s => s.name).join('、');
-          const msg = `${names} 发现了一款名为florr.io的游戏，压力 -5`;
+          const msg = `${names} 发现了一款名为generals.io的游戏，压力 -5`;
           c.log && c.log(`[florr] ${msg}`);
           window.pushEvent && window.pushEvent({ name: 'florr', description: msg, week: c.game.week });
           return null;

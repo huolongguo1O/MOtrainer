@@ -5,8 +5,8 @@ const TUTORIAL_STEPS = [
   {
     id: 'welcome',
     target: null,
-    title: '欢迎来到 OI 教练模拟器！',
-    content: '在这个游戏中，你将扮演一名信息学竞赛教练，带领学生们从零开始，冲击 NOI 金牌！让我们先熟悉一下界面。',
+    title: '欢迎来到 MO 教练模拟器！',
+    content: '在这个游戏中，你将扮演一名信息学竞赛教练，带领学生们从零开始，冲击 CMO 金牌！让我们先熟悉一下界面。',
     position: 'center',
     buttons: [
       { text: '开始教程', action: 'next', primary: true },
@@ -25,7 +25,7 @@ const TUTORIAL_STEPS = [
     id: 'students',
     target: '#student-list',
     title: '学生列表',
-    content: '这是你的学生。每个学生有<strong>思维</strong>、<strong>编程</strong>、<strong>心理</strong>三项基础能力，以及五大知识点。<br>压力过高会影响表现甚至导致退队！',
+    content: '这是你的学生。每个学生有<strong>思维</strong>、<strong>书写</strong>、<strong>心理</strong>三项基础能力，以及五大知识点。<br>压力过高会影响表现甚至导致退队！',
     position: 'right',
     highlight: true
   },

@@ -50,18 +50,18 @@ function getStudentQualificationStatus(student) {
     
     // 检查学生是否已经晋级下一场比赛
     // CSP-S1 不需要晋级资格，所有人都可以参加
-    if (nextComp.name === 'CSP-S1') {
+    if (nextComp.name === '校内选拔') {
       result.hasQualification = true;
-      result.html = '<span class="qualification-badge qualified" title="所有学生均可参加CSP-S1">✓</span>';
+      result.html = '<span class="qualification-badge qualified" title="所有学生均可参加校内选拔">✓</span>';
       return result;
     }
     
     // 检查晋级链：CSP-S1 -> CSP-S2 -> NOIP -> 省选 -> NOI
     const qualChain = {
-      'CSP-S2': 'CSP-S1',
-      'NOIP': 'CSP-S2',
-      '省选': 'NOIP',
-      'NOI': '省选'
+      '预赛': '校内选拔',
+      '联赛': '预赛',
+      '省培': '联赛',
+      'CMO': '省培'
     };
     
     const requiredComp = qualChain[nextComp.name];
@@ -113,13 +113,13 @@ function renderDifficultyTag(diff){
   const d = Number(diff) || 0;
   let label = '';
   let cls = '';
-  if(d <= 20){ label = '入门'; cls = 'diff-red'; }
-  else if(d <= 50){ label = '普及-'; cls = 'diff-orange'; }
-  else if(d <= 86){ label = '普及/提高-'; cls = 'diff-yellow'; }
-  else if(d <= 103){ label = '普及+/提高'; cls = 'diff-green'; }
-  else if(d <=120){ label = '提高+/省选-'; cls = 'diff-blue'; }
-  else if(d <= 150){ label = '省选/NOI-'; cls = 'diff-purple'; }
-  else { label = 'NOI+/CTSC'; cls = 'diff-black'; }
+  if(d <= 20){ label = '入门题'; cls = 'diff-red'; }
+  else if(d <= 50){ label = '联赛易'; cls = 'diff-orange'; }
+  else if(d <= 86){ label = '联赛中'; cls = 'diff-yellow'; }
+  else if(d <= 103){ label = '联赛难'; cls = 'diff-green'; }
+  else if(d <=120){ label = 'CMO难'; cls = 'diff-blue'; }
+  else if(d <= 150){ label = '集训队难'; cls = 'diff-purple'; }
+  else { label = '超难'; cls = 'diff-black'; }
 
   const legacy = (d <= 24) ? 'diff-beginner' : (d <= 34) ? 'diff-popular-low' : (d <= 44) ? 'diff-popular-high' : (d <= 64) ? 'diff-advanced-low' : (d <= 79) ? 'diff-provincial' : 'diff-noi';
 
@@ -471,23 +471,23 @@ function renderAll(){
         <div style="display:flex;align-items:center;gap:6px;">
           <span style="font-size:12px;color:#718096;font-weight:600;">知识</span>
           <div class="knowledge-badges">
-            <span class="kb" title="数据结构: ${Math.floor(Number(s.knowledge_ds||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}">
-              DS ${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}
+            <span class="kb" title="高考课内: ${Math.floor(Number(s.knowledge_ds||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}">
+              高考课内 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}
             </span>
-            <span class="kb" title="图论: ${Math.floor(Number(s.knowledge_graph||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}">
-              图论 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}
+            <span class="kb" title="几何: ${Math.floor(Number(s.knowledge_graph||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}">
+              几何 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}
             </span>
-            <span class="kb" title="字符串: ${Math.floor(Number(s.knowledge_string||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}">
-              字符串${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}
+            <span class="kb" title="代数: ${Math.floor(Number(s.knowledge_string||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}">
+              代数${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}
             </span>
-            <span class="kb" title="数学: ${Math.floor(Number(s.knowledge_math||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}">
-              数学 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}
+            <span class="kb" title="组合: ${Math.floor(Number(s.knowledge_math||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}">
+              组合 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}
             </span>
-            <span class="kb" title="动态规划: ${Math.floor(Number(s.knowledge_dp||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}">
-              DP ${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}
+            <span class="kb" title="数论: ${Math.floor(Number(s.knowledge_dp||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}">
+              数论 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}
             </span>
             <span class="kb ability" title="思维: ${Math.floor(Number(s.thinking||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.thinking||0)))}">思维${getLetterGradeAbility(Math.floor(Number(s.thinking||0)))}</span>
-            <span class="kb ability" title="代码: ${Math.floor(Number(s.coding||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}">代码${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}</span>
+            <span class="kb ability" title="书写: ${Math.floor(Number(s.coding||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}">书写${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}</span>
           </div>
         </div>
         
@@ -997,7 +997,7 @@ function holdMockContestUI(){
       };
       numProblems = contestType.numProblems;
       
-      const allTags = ["数据结构", "图论", "字符串", "数学", "动态规划"];
+      const allTags = ["高考课内", "几何", "代数", "组合", "数论"];
       for(let q = 0; q < numProblems; q++){
         let tags = [];
         const numTags = 1 + Math.floor(getRandom() * 2);
@@ -1059,7 +1059,7 @@ function entertainmentUI(){
     let id = sel ? parseInt(sel.dataset.id) : opts[0].id;
     let opt = opts.find(o=>o.id===id) || {cost:0, id: id};
     let cost = opt.cost;
-    if(opt.id === 5 && game.facilities.computer < 3){ alert("需要计算机等级 ≥ 3"); return; }
+    if(opt.id === 5 && game.facilities.computer < 3){ alert("需要教室等级 ≥ 3"); return; }
   const costAdj = Math.round(cost * (game.getExpenseMultiplier ? game.getExpenseMultiplier() : 1));
   if(game.budget < costAdj){ alert("经费不足"); return; }
   game.recordExpense(costAdj, `娱乐活动：${opt.val}`);
@@ -1177,7 +1177,7 @@ function upgradeFacilitiesUI(){
 }
 
 function initGameUI(){
-  showModal(`<h3>欢迎 — OI 教练模拟器</h3>
+  showModal(`<h3>欢迎 — MO 教练模拟器</h3>
     <label class="block">选择难度</label><select id="init-diff"><option value="1">简单</option><option value="2" selected>普通</option><option value="3">困难</option></select>
     <label class="block">选择省份</label><div id="init-prov-grid" class="prov-grid"></div>
     <label class="block">学生人数 (3-10)</label><input id="init-stu" type="number" min="3" max="10" value="5" />
@@ -1349,23 +1349,23 @@ function renderEndSummary(){
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:12px;color:#718096;font-weight:600;">知识</span>
               <div class="knowledge-badges">
-                <span class="kb" title="数据结构: ${Math.floor(Number(s.knowledge_ds||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}">
-                  DS ${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}
+                <span class="kb" title="高考课内: ${Math.floor(Number(s.knowledge_ds||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}">
+                  高考课内 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}
                 </span>
-                <span class="kb" title="图论: ${Math.floor(Number(s.knowledge_graph||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}">
-                  图论 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}
+                <span class="kb" title="几何: ${Math.floor(Number(s.knowledge_graph||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}">
+                  几何 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}
                 </span>
-                <span class="kb" title="字符串: ${Math.floor(Number(s.knowledge_string||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}">
-                  字符串${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}
+                <span class="kb" title="代数: ${Math.floor(Number(s.knowledge_string||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}">
+                  代数${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}
                 </span>
-                <span class="kb" title="数学: ${Math.floor(Number(s.knowledge_math||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}">
-                  数学 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}
+                <span class="kb" title="组合: ${Math.floor(Number(s.knowledge_math||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}">
+                  组合 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}
                 </span>
-                <span class="kb" title="动态规划: ${Math.floor(Number(s.knowledge_dp||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}">
-                  DP ${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}
+                <span class="kb" title="数论: ${Math.floor(Number(s.knowledge_dp||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}">
+                  数论 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}
                 </span>
                 <span class="kb ability" title="思维: ${Math.floor(Number(s.thinking||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.thinking||0)))}">思维${getLetterGradeAbility(Math.floor(Number(s.thinking||0)))}</span>
-                <span class="kb ability" title="代码: ${Math.floor(Number(s.coding||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}">代码${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}</span>
+                <span class="kb ability" title="书写: ${Math.floor(Number(s.coding||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}">书写${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}</span>
               </div>
             </div>
             
@@ -1480,16 +1480,16 @@ function renderEndSummary(){
       const competitions = (typeof window !== 'undefined' && Array.isArray(window.competitions) && window.competitions.length > 0)
         ? window.competitions.slice().sort((a, b) => a.week - b.week)
         : [
-          { name: 'CSP-S1', week: 6 },
-          { name: 'CSP-S2', week: 10 },
-          { name: 'NOIP', week: 14 },
-          { name: '省选', week: 18 },
-          { name: 'NOI', week: 22 },
-          { name: 'CSP-S1', week: 26 },
-          { name: 'CSP-S2', week: 30 },
-          { name: 'NOIP', week: 34 },
-          { name: '省选', week: 38 },
-          { name: 'NOI', week: 42 }
+          { name: '校内预选', week: 6 },
+          { name: '预赛', week: 10 },
+          { name: '联赛', week: 14 },
+          { name: '省培', week: 18 },
+          { name: 'CMO', week: 22 },
+          { name: '校内预选', week: 26 },
+          { name: '预赛', week: 30 },
+          { name: '联赛', week: 34 },
+          { name: '省培', week: 38 },
+          { name: 'CMO', week: 42 }
         ];
 
       const lastCompWeek = competitions.length ? Math.max(...competitions.map(c => Number(c.week) || 0)) : 0;
@@ -1606,14 +1606,14 @@ function renderEndSummary(){
  * 比赛含金量配置
  */
 const CONTEST_VALUE_MAP = {
-  'CSP-S1': 1,
-  'CSP-S2': 1.5,
-  'NOIP': 4,
-  '省选': 0,
-  'NOI': 8,
-  'CTS': 0,
-  'CTT': 0,
-  'IOI': 16
+  '校内预选': 1,
+  '预赛': 1.5,
+  '联赛': 4,
+  '省培': 0,
+  'CMO': 8,
+  '集训队一阶段': 0,
+  '集训队二阶段': 0,
+  'IMO': 16
 };
 
 /**
@@ -1701,8 +1701,8 @@ function calculateFinalEnding(gameData, endingReason) {
     
     const norm = normalizeEndingReason(endingReason);
     
-    if(norm === 'AKIOI'){
-      return "👑 AKIOI";
+    if(norm === 'AKIMO'){
+      return "👑 AKIMo";
     }
     
     if(norm === '顶尖结局'){
@@ -1755,10 +1755,10 @@ function calculateFinalEnding(gameData, endingReason) {
 
 function mapEndingToDescription(endingTitle){
   const map = {
-    '💸 经费耗尽结局': '项目经费枯竭，无法继续运作。研究与招生被迫停摆，学校的信息学团队被迫解散，曾经的努力戛然而止。',
-    '🌟 荣耀结局': '队伍取得辉煌胜利，获得NOI金牌或进入国家集训队，你也因此成为金牌教练，学校声誉大增，学生与导师名声大振，未来发展与资源扶持接踵而至。',
-    '🌟 顶尖结局': '学生在IOI国际赛场上获得奖牌，为国争光！这是信息学竞赛的最高荣誉，你培养出了世界级选手，成为传奇教练。',
-    '👑 AKIOI': '不可思议！学生在IOI上取得满分，这是人类智慧的巅峰表现！你的名字将永远铭刻在信息学竞赛的历史上，成为最伟大的教练之一。',
+    '💸 经费耗尽结局': '项目经费枯竭，无法继续运作。研究与招生被迫停摆，学校的数学团队被迫解散，曾经的努力戛然而止。',
+    '🌟 荣耀结局': '队伍取得辉煌胜利，获得CMO金牌或进入国家集训队，你也因此成为金牌教练，学校声誉大增，学生与导师名声大振，未来发展与资源扶持接踵而至。',
+    '🌟 顶尖结局': '学生在IMO国际赛场上获得奖牌，为国争光！这是信息学竞赛的最高荣誉，你培养出了世界级选手，成为传奇教练。',
+    '👑 AKIMO': '不可思议！学生在IMO上取得满分，这是人类智慧的巅峰表现！你的名字将永远铭刻在数学竞赛的历史上，成为最伟大的教练之一。',
     '😵 崩溃结局': '管理失误，团队陷入混乱，学生因为高压管理训练接连AFO，与赛事缺乏支撑，最终不得不终止项目。',
     '💼 普通结局': '项目平稳结束，虽无惊艳成就但积累了经验，信息学团队平稳地继续发展。',
     '❓ 未知结局': '结局信息不完整或读取异常，无法判定具体结果。请检查存档或重放以获得正确结算。'
@@ -1892,23 +1892,23 @@ function outingTrainingUI() {
         <div style="color:#666;margin-top:4px">
           <span style="font-size:12px;color:#718096;font-weight:600;">知识</span>
           <div class="knowledge-badges">
-            <span class="kb" title="数据结构: ${Math.floor(Number(s.knowledge_ds||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}">
-              DS ${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}
+            <span class="kb" title="高考课内: ${Math.floor(Number(s.knowledge_ds||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}">
+              高考课内 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_ds||0)))}
             </span>
-            <span class="kb" title="图论: ${Math.floor(Number(s.knowledge_graph||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}">
-              图论 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}
+            <span class="kb" title="几何: ${Math.floor(Number(s.knowledge_graph||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}">
+              几何 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_graph||0)))}
             </span>
-            <span class="kb" title="字符串: ${Math.floor(Number(s.knowledge_string||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}">
-              字符串${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}
+            <span class="kb" title="代数: ${Math.floor(Number(s.knowledge_string||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}">
+              代数${getLetterGradeAbility(Math.floor(Number(s.knowledge_string||0)))}
             </span>
-            <span class="kb" title="数学: ${Math.floor(Number(s.knowledge_math||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}">
-              数学 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}
+            <span class="kb" title="组合: ${Math.floor(Number(s.knowledge_math||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}">
+              组合 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_math||0)))}
             </span>
-            <span class="kb" title="动态规划: ${Math.floor(Number(s.knowledge_dp||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}">
-              DP ${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}
+            <span class="kb" title="数论: ${Math.floor(Number(s.knowledge_dp||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}">
+              数论 ${getLetterGradeAbility(Math.floor(Number(s.knowledge_dp||0)))}
             </span>
             <span class="kb ability" title="思维: ${Math.floor(Number(s.thinking||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.thinking||0)))}">思维${getLetterGradeAbility(Math.floor(Number(s.thinking||0)))}</span>
-            <span class="kb ability" title="代码: ${Math.floor(Number(s.coding||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}">代码${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}</span>
+            <span class="kb ability" title="书写: ${Math.floor(Number(s.coding||0))}" data-grade="${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}">书写${getLetterGradeAbility(Math.floor(Number(s.coding||0)))}</span>
           </div>
         </div>
         ${talentsHtml ? `<div style="display:flex;align-items:center;gap:6px;margin-top:6px;"><span style="font-size:12px;color:#718096;font-weight:600;">天赋</span><div class="student-talents">${talentsHtml}</div></div>` : ''}
